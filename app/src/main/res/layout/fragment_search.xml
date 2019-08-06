@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--搜索栏-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
+        <EditText
+            android:id="@+id/novel_name"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="0dp"
+            android:padding="5dp"
+            android:maxLines="1"
+            android:layout_weight="1"
+            android:hint="请输入小说名称"
+            android:textColorHint="#AAAAAA"
+            android:text="牧神记"
+            android:textSize="15dp"
+            android:background="#FFFFFFFF"/>
+
+        <Button
+            android:id="@+id/search_btn"
+            android:text="搜索"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="@drawable/search_btn_shape"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/search_status"
+            android:gravity="center"
+            android:text="正在搜索..."
+            android:textSize="30dp"
+            android:background="#FFFFFFFF"/>
+
+    </FrameLayout>
+
+</LinearLayout>

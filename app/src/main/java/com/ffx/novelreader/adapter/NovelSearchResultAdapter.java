@@ -43,6 +43,7 @@ public class NovelSearchResultAdapter extends RecyclerView.Adapter<NovelSearchRe
         holder.novelLastUpdateTime.setText(novel.getLastUpdateTime());
         holder.novelNewestChapterName.setText(novel.getNewestChapterName());
         holder.novelSource.setText(UrlStringUtil.getHostName(novel.getMenuUrl()));
+        holder.novelDesc.setText(novel.getDescription());
     }
 
     @Override
@@ -57,6 +58,7 @@ public class NovelSearchResultAdapter extends RecyclerView.Adapter<NovelSearchRe
         TextView novelNewestChapterName;
         TextView novelLastUpdateTime;
         TextView novelSource;
+        TextView novelDesc;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -66,6 +68,7 @@ public class NovelSearchResultAdapter extends RecyclerView.Adapter<NovelSearchRe
             novelNewestChapterName = (TextView)itemView.findViewById(R.id.novel_newest_chapter);
             novelLastUpdateTime = (TextView)itemView.findViewById(R.id.novel_last_update_time);
             novelSource = (TextView)itemView.findViewById(R.id.novel_source);
+            novelDesc = (TextView)itemView.findViewById(R.id.novel_desc);
         }
     }
 
