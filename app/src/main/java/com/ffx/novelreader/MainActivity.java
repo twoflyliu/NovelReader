@@ -26,6 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setAdapter(new MainFragmentAdapter(getSupportFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);
-        viewPager.setOffscreenPageLimit(6); //防止销毁页面
+        viewPager.setOffscreenPageLimit(2); //防止销毁页面
     }
 }

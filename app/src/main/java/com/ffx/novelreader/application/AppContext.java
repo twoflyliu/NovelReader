@@ -6,6 +6,7 @@ import android.util.Log;
 import com.ffx.novelreader.factory.net.NovelParserFactory;
 import com.ffx.novelreader.factory.net.SearchEngineFactory;
 import com.ffx.novelreader.factory.net.SearchUrlFactory;
+import com.ffx.novelreader.impl.engine.net.LocalSearchEngineImpl;
 import com.ffx.novelreader.impl.engine.net.MultiThreadSearchEngineImpl;
 import com.ffx.novelreader.impl.engine.net.SingleThreadSearchEngineImpl;
 import com.ffx.novelreader.impl.net.BiQuGeSearchUrlGeneratorParser;
@@ -45,9 +46,11 @@ public class AppContext extends LitePalApplication {
         initAllSearchEngine();
     }
 
+
     private void initAllSearchEngine() {
         SearchEngineFactory factory = SearchEngineFactory.getInstance();
         //factory.registerSearchEngine(new MultiThreadSearchEngineImpl());
+        factory.registerSearchEngine(new LocalSearchEngineImpl());
         factory.registerSearchEngine(new SingleThreadSearchEngineImpl());
     }
 

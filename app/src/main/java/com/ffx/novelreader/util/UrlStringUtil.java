@@ -57,7 +57,7 @@ public class UrlStringUtil {
             e.printStackTrace();
         }
 
-        Log.d(TAG, "urlJoin: UrlStringUtil.urlJoin(\"" + host + "\", \"" + path + "\") = " + result);
+        //Log.d(TAG, "urlJoin: UrlStringUtil.urlJoin(\"" + host + "\", \"" + path + "\") = " + result);
         return result;
     }
 

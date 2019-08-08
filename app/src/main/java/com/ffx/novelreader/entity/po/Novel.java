@@ -4,10 +4,12 @@ package com.ffx.novelreader.entity.po;
  * Created by TwoFlyLiu on 2019/8/5.
  */
 
+import org.litepal.crud.DataSupport;
+
 /**
  * Novel 表示小说
  */
-public class Novel {
+public class Novel extends DataSupport {
     private int id;
     private String name;
     private String lastUpdateTime;

@@ -1,14 +1,60 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ffx.novelreader.fragment.MainSearchFragment">
+    android:orientation="vertical">
 
-    <TextView
+    <!--模拟导航栏-->
+    <com.ffx.novelreader.custom.RadioTitleLayout
+        android:id="@+id/radio_title_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="书架页面"
-        android:gravity="center"
-        android:textSize="30dp"/>
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="#BBBBBB"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/done"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="#BBBBBB"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/downloading"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="操作"
+            android:textColor="#BBBBBB"
+            android:focusable="true"
+            android:clickable="true"
+            android:gravity="center"/>
+    </com.ffx.novelreader.custom.RadioTitleLayout>
 
-</FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/bookshelf_recyler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <!--页面内容-->
+        <!--<TextView-->
+            <!--android:id="@+id/bookshelf_status"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center"-->
+            <!--android:textSize="30dp"-->
+            <!--android:text="书架页面空"-->
+            <!--android:background="#FFFFFFFF"/>-->
+    </FrameLayout>
+
+
+</LinearLayout>

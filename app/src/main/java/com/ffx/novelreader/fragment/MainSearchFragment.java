@@ -41,7 +41,6 @@ public class MainSearchFragment extends Fragment {
 
 
     public MainSearchFragment() {
-        // Required empty public constructor
     }
 
     public static MainSearchFragment newInstance() {
@@ -95,13 +94,8 @@ public class MainSearchFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-
-                                    for (int i = 0; i < 100; i++) {
-                                        novelList.add(novelList.get(0));
-                                    }
-
-                                    updateSearchStatus(false);
-                                    searchResultAdapter.refresh(novelList);
+                                updateSearchStatus(false);
+                                searchResultAdapter.refresh(novelList);
                                 }
                             });
                         }

@@ -1,10 +1,12 @@
 package com.ffx.novelreader.entity.po;
 
+import org.litepal.crud.DataSupport;
+
 /**
  * Created by TwoFlyLiu on 2019/8/5.
  */
 
-public class Chapter {
+public class Chapter extends DataSupport {
     private String title;
     private String content;
     private int menuId;

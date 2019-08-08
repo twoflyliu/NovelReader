@@ -1,14 +1,63 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <!--模拟导航栏-->
+    <com.ffx.novelreader.custom.RadioTitleLayout
+        android:id="@+id/radio_title_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="下载页面"
-        android:gravity="center"
-        android:textSize="30dp"/>
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
+        <TextView
+            android:id="@+id/all"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="所有下载"
+            android:textColor="#BBBBBB"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/done"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="已经完成"
+            android:textColor="#BBBBBB"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/downloading"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="正在下载"
+            android:textColor="#BBBBBB"
+            android:focusable="true"
+            android:clickable="true"
+            android:gravity="center"/>
+    </com.ffx.novelreader.custom.RadioTitleLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/download_progress_recyler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <!--页面内容-->
+        <TextView
+            android:id="@+id/download_status"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="30dp"
+            android:text="下载页面空"
+            android:background="#FFFFFFFF"/>
+    </FrameLayout>
+
 
 </LinearLayout>

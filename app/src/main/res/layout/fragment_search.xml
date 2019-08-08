@@ -22,7 +22,7 @@
             android:layout_weight="1"
             android:hint="请输入小说名称"
             android:textColorHint="#AAAAAA"
-            android:text="牧神记"
+            android:text="寸芒"
             android:textSize="15dp"
             android:background="#FFFFFFFF"/>
 

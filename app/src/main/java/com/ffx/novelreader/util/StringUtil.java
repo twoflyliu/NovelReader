@@ -26,12 +26,29 @@ public final class StringUtil {
     }
 
     /**
+     * 将字符串中匹配的字串提取出来
+     * @param input 输入字符串
+     * @param pattern 匹配Pattern
+     * @return 匹配的字串
+     */
+    public static String matchTotal(String input, Pattern pattern) {
+        Matcher matcher = pattern.matcher(input);
+        String result = "";
+        if (matcher.find()) {
+            result = matcher.group(0);
+        }
+        matcher.reset();
+        return result;
+    }
+
+    /**
      * 将字符串中html转移字符替换为对应的字符
      * @param htmlText html字符串
      * @return 移除后的字符串
      */
     public static String htmtlRemoveEscape(String htmlText) {
         htmlText = htmlText.replaceAll("&nbsp;", " "); //移除空白字符
+        htmlText = htmlText.replaceAll("<br\\s?/>", "\n");
         htmlText = htmlText.replaceAll("<p>([\\s\\S]+?)</p>", "$1\n");
         return htmlText;
     }
