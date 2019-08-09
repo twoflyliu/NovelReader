@@ -25,6 +25,13 @@ public interface MenuDao {
     boolean delete(Menu menu);
 
     /**
+     * 根据小说id来执行删除
+     * @param novelId 小说id
+     * @return 成功与否
+     */
+    boolean deleteByNovelId(int novelId);
+
+    /**
      * 更新菜单
      * @param menu 菜单
      * @return 成功与否
@@ -44,4 +51,5 @@ public interface MenuDao {
      * @return 成功与否
      */
     boolean saveAll(List<Menu> menuList);
+
 }

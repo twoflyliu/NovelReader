@@ -2,11 +2,13 @@ package com.ffx.novelreader.entity.po;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
+
 /**
  * Created by TwoFlyLiu on 2019/8/5.
  */
 
-public class Menu extends DataSupport {
+public class Menu extends DataSupport implements Serializable {
     private int id;
     private String title;
     private String url;
@@ -51,5 +53,10 @@ public class Menu extends DataSupport {
 
     public void setNovelId(int novelId) {
         this.novelId = novelId;
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 }

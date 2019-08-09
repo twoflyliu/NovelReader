@@ -26,6 +26,13 @@ public interface ChapterDao {
     boolean delete(Chapter chapter);
 
     /**
+     * 根据菜单id来删除对应的章节
+     * @param menuid
+     * @return
+     */
+    boolean deleteByMenuId(int menuid);
+
+    /**
      * 更新章节内容
      * @param chapter 章节内容
      * @return 成功与否

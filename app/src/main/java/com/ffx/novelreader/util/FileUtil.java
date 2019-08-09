@@ -8,9 +8,12 @@ import com.ffx.novelreader.application.AppContext;
 import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 
 /**
@@ -73,4 +76,66 @@ public class FileUtil {
 
     }
 
+    public static void writeObjectToFile(String fileName, Object object) {
+        Context context = AppContext.applicationContext;
+        if (null == context) {
+            throw new NullPointerException("AppContext.applicationContext is null");
+        }
+
+        FileOutputStream fos = null;
+        ObjectOutputStream oos = null;
+
+        try {
+            fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(object);
+            oos.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (oos != null) {
+                try {
+                    oos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static Object readObjectFromFile(String fileName) {
+        Context context = AppContext.applicationContext;
+        if (null == context) {
+            throw new NullPointerException("AppContext.applicationContext is null");
+        }
+
+        Object result = null;
+
+        FileInputStream fis = null;
+        ObjectInputStream ois = null;
+
+        try {
+            fis = context.openFileInput(fileName);
+            ois = new ObjectInputStream(fis);
+            result = ois.readObject();
+        } catch (FileNotFoundException e) {
+            //e.printStackTrace();
+        } catch (IOException e) {
+            //e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            //e.printStackTrace();
+        } finally {
+            if (ois != null) {
+                try {
+                    ois.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return result;
+    }
 }

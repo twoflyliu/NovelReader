@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="5dp"
-    android:clickable="true"
-    android:focusableInTouchMode="true"
-    android:focusable="true"
-    android:background="@drawable/search_result_item_selected">
-
+    android:orientation="vertical"
+    android:layout_margin="10dp">
     <ImageView
-        android:padding="1dp"
         android:id="@+id/novel_ico"
         android:layout_width="100dp"
         android:layout_height="125dp" />
@@ -19,5 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"/>
-
 </LinearLayout>
+
+<!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="#8000">-->
+    <!--<CheckBox-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"/>-->
+<!--</RelativeLayout>-->
+

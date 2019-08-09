@@ -46,4 +46,10 @@ public class MenuDaoImpl implements MenuDao {
 
         return result;
     }
+
+    @Override
+    public boolean deleteByNovelId(int novelId) {
+        int rowsAfected = DataSupport.deleteAll(Menu.class, "novelid=?", String.valueOf(novelId));
+        return rowsAfected > 0;
+    }
 }

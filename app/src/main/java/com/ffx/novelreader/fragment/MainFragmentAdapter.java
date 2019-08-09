@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class MainFragmentAdapter extends FragmentPagerAdapter {
     public static final int PAGE_COUNT = 3;
-    public static String[] titleArray = new String[]{"搜索", "下载", "阅读"};
+    public static String[] titleArray = new String[]{"书架", "搜索", "下载"};
 
     public MainFragmentAdapter(FragmentManager fm) {
         super(fm);
@@ -19,11 +19,11 @@ public class MainFragmentAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
        if (0 == position) {
-           return MainSearchFragment.newInstance();
-       } else if (1 == position) {
-           return DownloadFragment.newInstance();
-       } else {
            return BookShelfFragment.newInstance();
+       } else if (1 == position) {
+           return MainSearchFragment.newInstance();
+       } else {
+           return DownloadFragment.newInstance();
        }
     }
 

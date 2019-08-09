@@ -23,6 +23,8 @@ public class RadioTitleLayout extends LinearLayout {
     private static int tabUnselectedTextColor;
     private int currentSelectIndex;
 
+    private int delaySelectIndex = -1;
+
     private List<TextView> textViews;
 
     OnTabCurrentItemChangedListener listener;
@@ -45,6 +47,11 @@ public class RadioTitleLayout extends LinearLayout {
         super.onAttachedToWindow();
         Log.d(TAG, "onAttachedToWindow: " + getChildCount());
         bingClickListeners();
+
+        if (delaySelectIndex != -1) {
+            selectItem(delaySelectIndex);
+            delaySelectIndex = -1;
+        }
     }
 
     private void bingClickListeners() {
@@ -69,10 +76,13 @@ public class RadioTitleLayout extends LinearLayout {
     }
 
     public void selectItem(int index) {
-        if (index < 0 && index >= textViews.size()) {
+        if (index < 0 || (textViews.size() > 0 && index >= textViews.size())) {
             throw new IndexOutOfBoundsException("index = " + index + ", total = " + textViews.size());
+        } else if (textViews.size() == 0) {
+            delaySelectIndex = index;
+        } else {
+            selectItem(textViews.get(index));
         }
-        selectItem(textViews.get(index));
     }
 
     public void selectItem(TextView item) {

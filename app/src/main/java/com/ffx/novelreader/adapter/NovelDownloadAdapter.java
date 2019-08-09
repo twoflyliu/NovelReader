@@ -1,20 +1,20 @@
 package com.ffx.novelreader.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.ffx.novelreader.DownloadDeleteActivity;
 import com.ffx.novelreader.R;
 import com.ffx.novelreader.application.AppContext;
-import com.ffx.novelreader.entity.po.Novel;
 import com.ffx.novelreader.entity.vo.NovelDownloadProgressVo;
-import com.ffx.novelreader.inter.service.NovelService;
+import com.ffx.novelreader.fragment.DownloadFragment;
 import com.ffx.novelreader.util.UrlStringUtil;
 
 import java.util.List;
@@ -23,14 +23,15 @@ import java.util.List;
  * Created by TwoFlyLiu on 2019/8/6.
  */
 
-public class NovelDownloadProgressAdapter extends RecyclerView.Adapter<NovelDownloadProgressAdapter.ViewHolder>{
+public class NovelDownloadAdapter extends RecyclerView.Adapter<NovelDownloadAdapter.ViewHolder>{
     private static final String TAG = "NovelDownloadProgressAd";
 
     private List<NovelDownloadProgressVo> novelDownloadProgressVos;
-    private NovelService novelService;
+    private DownloadFragment fragment;
 
-    public NovelDownloadProgressAdapter(List<NovelDownloadProgressVo> novelDownloadProgressVos) {
+    public NovelDownloadAdapter(List<NovelDownloadProgressVo> novelDownloadProgressVos, DownloadFragment fragment) {
         this.novelDownloadProgressVos = novelDownloadProgressVos;
+        this.fragment = fragment;
     }
 
     @Override
@@ -38,6 +39,16 @@ public class NovelDownloadProgressAdapter extends RecyclerView.Adapter<NovelDown
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.download_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
+
+        holder.itemContainer.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                fragment.saveDownloadList();
+                DownloadDeleteActivity.actionStart(1, fragment, null);
+                return true;
+            }
+        });
+
         return holder;
     }
 
@@ -63,6 +74,7 @@ public class NovelDownloadProgressAdapter extends RecyclerView.Adapter<NovelDown
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        LinearLayout itemContainer;
         ImageView novelIcon;
         ProgressBar progressBar;
         TextView novelName;
@@ -73,6 +85,7 @@ public class NovelDownloadProgressAdapter extends RecyclerView.Adapter<NovelDown
 
         public ViewHolder(View itemView) {
             super(itemView);
+            itemContainer = (LinearLayout)itemView.findViewById(R.id.download_item_container);
             novelIcon = (ImageView)itemView.findViewById(R.id.novel_ico);
             progressBar = (ProgressBar)itemView.findViewById(R.id.progress);
             novelIcon = (ImageView)itemView.findViewById(R.id.novel_ico);

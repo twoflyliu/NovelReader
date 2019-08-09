@@ -1,6 +1,8 @@
 package com.ffx.novelreader.fragment;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,22 +14,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.ffx.novelreader.MainActivity;
 import com.ffx.novelreader.R;
-import com.ffx.novelreader.adapter.NovelDownloadProgressAdapter;
+import com.ffx.novelreader.adapter.NovelDownloadAdapter;
 import com.ffx.novelreader.application.AppContext;
 import com.ffx.novelreader.custom.RadioTitleLayout;
 import com.ffx.novelreader.entity.po.Novel;
 import com.ffx.novelreader.entity.vo.NovelDownloadProgressVo;
 import com.ffx.novelreader.factory.service.ServiceFactory;
 import com.ffx.novelreader.inter.service.DownloadService;
+import com.ffx.novelreader.util.FileUtil;
 
-import java.lang.reflect.Type;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DownloadFragment extends Fragment {
     private static final String TAG = "DownloadFragment";
+    public static final String DOWNPOAD_PROGRESS_LIST = "download_progress_list.bin";
 
     private static final String ALL_DOWNLOAD = "所有下载";
     private static final String DOWNLOAD_DONE = "已经完成";
@@ -47,7 +50,7 @@ public class DownloadFragment extends Fragment {
 
     private List<NovelDownloadProgressVo> allNovelDownloadProgressVoList;
     private List<NovelDownloadProgressVo> novelDownloadProgressVoList;
-    private NovelDownloadProgressAdapter novelDownloadProgressAdapter;
+    private NovelDownloadAdapter novelDownloadProgressAdapter;
 
     public DownloadFragment() {
         instance = this;
@@ -72,6 +75,72 @@ public class DownloadFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_download, container, false);
 
+        initDownloadService();
+        intiRecylerView(view);
+        initRadioTitleLayout(view);
+
+        initLocalDownloadList(view); //
+
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        dumpDownloadListToLocal();
+        super.onDestroyView();
+    }
+
+    private void dumpDownloadListToLocal() {
+        FileUtil.writeObjectToFile(DOWNPOAD_PROGRESS_LIST, allNovelDownloadProgressVoList);
+    }
+
+    public void saveDownloadList() {
+        dumpDownloadListToLocal();
+    }
+
+    public void refreshDownloadList() {
+        initLocalDownloadList(null);
+    }
+
+    private void initLocalDownloadList(View view) {
+        Object obj = FileUtil.readObjectFromFile(DOWNPOAD_PROGRESS_LIST);
+        if (obj != null) {
+            if (obj instanceof List) {
+                allNovelDownloadProgressVoList = (List<NovelDownloadProgressVo>)(obj);
+                downloadStatusTextView.setVisibility(View.GONE);
+                updatePage(this.pageType, true);
+            }
+        }
+    }
+
+    private void intiRecylerView(View view) {
+        allNovelDownloadProgressVoList = new ArrayList<>();
+        novelDownloadProgressVoList = new ArrayList<>();
+
+        downloadProgressRecyclerView = (RecyclerView)view.findViewById(R.id.download_progress_recyler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(AppContext.applicationContext);
+        downloadProgressRecyclerView.setLayoutManager(layoutManager);
+        novelDownloadProgressAdapter = new NovelDownloadAdapter(novelDownloadProgressVoList, this);
+        downloadProgressRecyclerView.setAdapter(novelDownloadProgressAdapter);
+        downloadProgressRecyclerView.setSelected(true);
+    }
+
+    private void initRadioTitleLayout(View view) {
+        downloadStatusTextView = (TextView)view.findViewById(R.id.download_status);
+        radioTitleLayout = (RadioTitleLayout)view.findViewById(R.id.radio_title_layout);
+        radioTitleLayout.setOnTabCurrentItemChangedListener(new RadioTitleLayout.OnTabCurrentItemChangedListener() {
+            @Override
+            public void onTabCurrentItemChanged(int currentSelectedIndex, int oldSelectedIndex) {
+                Log.d(TAG, "onTabCurrentItemChanged: current=" + currentSelectedIndex + ", old=" + oldSelectedIndex);
+                updatePage(radioTitleLayout.getCurrentItem().getText().toString(), false);
+            }
+        });
+
+        this.pageType = ALL_DOWNLOAD;
+        radioTitleLayout.selectItem(0);
+    }
+
+    private void initDownloadService() {
         downloadService = ServiceFactory.getInstance().getDownloadService();
         downloadService.setOnDownloadProgressChangeListener(new DownloadService.OnDownloadProgressChangeListener() {
             @Override
@@ -86,27 +155,6 @@ public class DownloadFragment extends Fragment {
             }
         });
 
-        novelDownloadProgressVoList = new ArrayList<>();
-        downloadStatusTextView = (TextView)view.findViewById(R.id.download_status);
-        radioTitleLayout = (RadioTitleLayout)view.findViewById(R.id.radio_title_layout);
-        radioTitleLayout.setOnTabCurrentItemChangedListener(new RadioTitleLayout.OnTabCurrentItemChangedListener() {
-            @Override
-            public void onTabCurrentItemChanged(int currentSelectedIndex, int oldSelectedIndex) {
-                Log.d(TAG, "onTabCurrentItemChanged: current=" + currentSelectedIndex + ", old=" + oldSelectedIndex);
-                updatePage(radioTitleLayout.getCurrentItem().getText().toString(), false);
-            }
-        });
-
-        pageType = ALL_DOWNLOAD;
-        allNovelDownloadProgressVoList = new ArrayList<>();
-        downloadProgressRecyclerView = (RecyclerView)view.findViewById(R.id.download_progress_recyler_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(AppContext.applicationContext);
-        downloadProgressRecyclerView.setLayoutManager(layoutManager);
-        novelDownloadProgressAdapter = new NovelDownloadProgressAdapter(novelDownloadProgressVoList);
-        downloadProgressRecyclerView.setAdapter(novelDownloadProgressAdapter);
-        downloadProgressRecyclerView.setSelected(true);
-
-        return view;
     }
 
     public static DownloadFragment getInstance() {
@@ -128,6 +176,13 @@ public class DownloadFragment extends Fragment {
         updatePage(this.pageType, true);
 
         downloadService.downloadAndSave(novel);
+        switchToDownload();
+    }
+
+    private void switchToDownload() {
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).switchToDownload();
+        }
     }
 
     public void update(Novel novel) {
@@ -145,6 +200,7 @@ public class DownloadFragment extends Fragment {
         updatePage(this.pageType, true);
 
         downloadService.updateAndSave(novel);
+        switchToDownload();
     }
 
     private NovelDownloadProgressVo find(Novel novel, List<NovelDownloadProgressVo> novelList) {
@@ -204,5 +260,18 @@ public class DownloadFragment extends Fragment {
             }
         }
         novelDownloadProgressAdapter.refresh(novelDownloadProgressVoList);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case 1:
+                if (resultCode == Activity.RESULT_OK) {
+                    refreshDownloadList();
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

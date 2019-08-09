@@ -50,4 +50,10 @@ public interface NovelService {
      * @return 所有小说
      */
     List<Novel> findAll();
+
+    /**
+     * 深度删除小说（包括基本信息，菜单列表和章节）
+     * @param entity
+     */
+    void deepDelete(Novel entity);
 }

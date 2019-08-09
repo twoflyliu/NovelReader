@@ -2,11 +2,13 @@ package com.ffx.novelreader.entity.vo;
 
 import com.ffx.novelreader.entity.po.Novel;
 
+import java.io.Serializable;
+
 /**
  * Created by TwoFlyLiu on 2019/8/7.
  */
 
-public class NovelDownloadProgressVo {
+public class NovelDownloadProgressVo implements Serializable {
     private Novel novel;
     private int progress;
 

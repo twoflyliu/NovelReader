@@ -25,6 +25,12 @@ public class ChapterDaoImpl implements ChapterDao {
     }
 
     @Override
+    public boolean deleteByMenuId(int menuid) {
+        int rowsAffected = DataSupport.deleteAll(Chapter.class, "menuid=?", String.valueOf(menuid));
+        return rowsAffected > 0;
+    }
+
+    @Override
     public boolean update(Chapter chapter) {
         return chapter.save();
     }

@@ -94,8 +94,8 @@ public class MainSearchFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                updateSearchStatus(false);
-                                searchResultAdapter.refresh(novelList);
+                                    updateSearchStatus(false);
+                                    searchResultAdapter.refresh(novelList);
                                 }
                             });
                         }

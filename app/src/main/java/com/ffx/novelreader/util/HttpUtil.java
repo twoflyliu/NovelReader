@@ -18,9 +18,9 @@ import okhttp3.Response;
  */
 
 public class HttpUtil {
-    private static final int CONNECT_TIMEOUT = 6; //6s
-    private static final int READ_TIMEOUT = 6;
-    private static final int WRITE_TIMEOUT = 6;
+    private static final int CONNECT_TIMEOUT = 3; //3s
+    private static final int READ_TIMEOUT = 2;
+    private static final int WRITE_TIMEOUT = 2;
 
     private static final int FAIL_RETRY_COUNT = 100;
     private static final String TAG = "HttpUtil";

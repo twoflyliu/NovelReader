@@ -2,11 +2,13 @@ package com.ffx.novelreader.entity.po;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
+
 /**
  * Created by TwoFlyLiu on 2019/8/5.
  */
 
-public class Chapter extends DataSupport {
+public class Chapter extends DataSupport implements Serializable {
     private String title;
     private String content;
     private int menuId;

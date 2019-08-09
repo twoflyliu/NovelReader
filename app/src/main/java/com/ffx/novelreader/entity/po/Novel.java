@@ -6,10 +6,12 @@ package com.ffx.novelreader.entity.po;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
+
 /**
  * Novel 表示小说
  */
-public class Novel extends DataSupport {
+public class Novel extends DataSupport implements Serializable {
     private int id;
     private String name;
     private String lastUpdateTime;

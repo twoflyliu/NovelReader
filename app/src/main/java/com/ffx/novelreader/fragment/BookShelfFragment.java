@@ -1,8 +1,11 @@
 package com.ffx.novelreader.fragment;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.ffx.novelreader.MainActivity;
 import com.ffx.novelreader.R;
 import com.ffx.novelreader.adapter.BookShelfAdapter;
 import com.ffx.novelreader.application.AppContext;
@@ -29,6 +34,8 @@ import java.util.List;
  */
 public class BookShelfFragment extends Fragment {
     private static final String TAG = "BookShelfFragment";
+    private static final int REQUEST_CODE = 1;
+
     private static BookShelfFragment instance;
 
     private RecyclerView bookShelfRecyclerView;
@@ -36,6 +43,7 @@ public class BookShelfFragment extends Fragment {
     private List<Novel> novelList;
 
     private TextView bookShelfStatus;
+    private Button switchToSearchBtn;
 
     private NovelService novelService;
 
@@ -71,14 +79,40 @@ public class BookShelfFragment extends Fragment {
         novelService = ServiceFactory.getInstance().getNovelService();
 
         initBookShelfRecyclerView(view);
-        refreshBookShelf();
+        initSwitchToSearch(view);
+        initBookShelfStatus(view);
 
-        //bookShelfStatus = (TextView)view.findViewById(R.id.bookshelf_status);
+        refreshBookShelf();
         return view;
+    }
+
+    private void initBookShelfStatus(View view) {
+        bookShelfStatus = (TextView)view.findViewById(R.id.bookshelf_status);
+    }
+
+    private void initSwitchToSearch(View view) {
+        switchToSearchBtn = (Button)view.findViewById(R.id.switch_to_search);
+        switchToSearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentActivity activity = getActivity();
+                if (activity instanceof MainActivity) {
+                    MainActivity mainActivity = (MainActivity)activity;
+                    mainActivity.switchToSearch();
+                }
+            }
+        });
     }
 
     public void refreshBookShelf() {
         novelList = novelService.findAll();
+
+        if (novelList.size() == 0) {
+            bookShelfStatus.setVisibility(View.VISIBLE);
+        } else {
+            bookShelfStatus.setVisibility(View.GONE);
+        }
+
         bookShelfAdapter.refresh(novelList);
     }
 
@@ -88,8 +122,21 @@ public class BookShelfFragment extends Fragment {
         GridLayoutManager layoutManager = new GridLayoutManager(AppContext.applicationContext, 3);
         bookShelfRecyclerView.setLayoutManager(layoutManager);
         novelList = new ArrayList<>();
-        bookShelfAdapter = new BookShelfAdapter(novelList);
+        bookShelfAdapter = new BookShelfAdapter(novelList, REQUEST_CODE, this);
         bookShelfRecyclerView.setAdapter(bookShelfAdapter);
-        bookShelfRecyclerView.setSelected(true);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: requestCode=" + requestCode);
+        switch (requestCode) {
+            case 1:
+                if (resultCode == Activity.RESULT_OK) {
+                    refreshBookShelf();
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
