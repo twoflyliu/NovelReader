@@ -3,6 +3,7 @@ package com.ffx.novelreader.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class NovelMenuFragment extends Fragment {
+    private static final String TAG = "NovelMenuFragment";
+
     private ListView listView;
 
     private List<Menu> menuList;
@@ -54,7 +57,7 @@ public class NovelMenuFragment extends Fragment {
                 if (getActivity() instanceof NovelReaderActivity) {
                     NovelReaderActivity activity = (NovelReaderActivity)getActivity();
                     activity.closeChapterMenu();
-                    activity.loadChapter(position, true);
+                    activity.loadChapter(position);
                 }
             }
         });
@@ -64,10 +67,16 @@ public class NovelMenuFragment extends Fragment {
         this.menuList.clear();
         this.menuList.addAll(menuList);
         this.adapter.notifyDataSetChanged();
+        Log.i(TAG, "refresh: menu list");
     }
 
     public int getMenuCount() {
         return this.menuList.size();
     }
 
+    public void selectItem(int curReadChapterIndex) {
+        if (listView != null) {
+            listView.setSelection(curReadChapterIndex);
+        }
+    }
 }
