@@ -232,6 +232,13 @@ public class DownloadServiceImpl implements DownloadService {
                 boolean ok = chapterDao.save(chapter);
                 if (ok) {
                     Log.i(TAG, "downloadAndSaveChapter: save chapter(" + chapter.getTitle() +") success");
+
+                    menu.setContentLength(chapter.getContent().length());
+                    if (menuDao.update(menu)) {
+                        Log.i(TAG, "downloadAndSaveChapter: update menu(" + menu.getTitle() + ") content length success");
+                    } else {
+                        Log.i(TAG, "downloadAndSaveChapter: update menu(" + menu.getTitle() + ") content length fail");
+                    }
                 } else {
                     result = false;
                     Log.e(TAG, "downloadAndSaveChapter: save chapter(" + chapter.getTitle() +") fail");

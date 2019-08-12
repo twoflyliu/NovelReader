@@ -1,11 +1,13 @@
 package com.ffx.novelreader.factory.service;
 
 import com.ffx.novelreader.adapter.NovelSearchResultAdapter;
+import com.ffx.novelreader.impl.service.BookListServiceImpl;
 import com.ffx.novelreader.impl.service.ChapterServiceImpl;
 import com.ffx.novelreader.impl.service.DownloadServiceImpl;
 import com.ffx.novelreader.impl.service.MenuServiceImpl;
 import com.ffx.novelreader.impl.service.NovelServiceImpl;
 import com.ffx.novelreader.impl.service.SearchServiceImpl;
+import com.ffx.novelreader.inter.service.BookListService;
 import com.ffx.novelreader.inter.service.ChapterService;
 import com.ffx.novelreader.inter.service.DownloadService;
 import com.ffx.novelreader.inter.service.MenuService;
@@ -25,6 +27,7 @@ public class ServiceFactory {
     private NovelService novelService = new NovelServiceImpl();
     private MenuService menuService = new MenuServiceImpl();
     private ChapterService chapterService = new ChapterServiceImpl();
+    private BookListService bookListService = new BookListServiceImpl();
 
     public static ServiceFactory getInstance() {
         if (null == instance) {
@@ -55,5 +58,9 @@ public class ServiceFactory {
 
     public DownloadService getDownloadService() {
         return downloadService;
+    }
+
+    public BookListService getBookListService() {
+        return bookListService;
     }
 }

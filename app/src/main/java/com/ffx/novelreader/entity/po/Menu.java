@@ -12,14 +12,16 @@ public class Menu extends DataSupport implements Serializable {
     private int id;
     private String title;
     private String url;
+    private int contentLength;
     private int novelId;
 
     public Menu() {}
 
-    public Menu(int id, String title, String url, int novelId) {
+    public Menu(int id, String title, String url, int contentLength, int novelId) {
         this.id = id;
         this.title = title;
         this.url = url;
+        this.contentLength = contentLength;
         this.novelId = novelId;
     }
 
@@ -58,5 +60,13 @@ public class Menu extends DataSupport implements Serializable {
     @Override
     public String toString() {
         return title;
+    }
+
+    public int getContentLength() {
+        return contentLength;
+    }
+
+    public void setContentLength(int contentLength) {
+        this.contentLength = contentLength;
     }
 }

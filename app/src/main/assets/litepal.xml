@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <litepal>
     <dbname value="book"/>
-    <version value="1"/>
+    <version value="2"/>
     <list>
         <mapping class="com.ffx.novelreader.entity.po.Novel"/>
         <mapping class="com.ffx.novelreader.entity.po.Menu"/>
         <mapping class="com.ffx.novelreader.entity.po.Chapter"/>
+
+        <mapping class="com.ffx.novelreader.treader.db.BookCatalogue"/>
+        <mapping class="com.ffx.novelreader.treader.db.BookList"/>
+        <mapping class="com.ffx.novelreader.treader.db.BookMarks"/>
     </list>
 </litepal>

@@ -28,12 +28,7 @@ import com.ffx.novelreader.inter.service.ChapterService;
 import com.ffx.novelreader.inter.service.MenuService;
 import com.ffx.novelreader.inter.service.NovelService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import me.codeboy.android.aligntextview.CBAlignTextView;
 
 public class NovelReaderActivity extends AppCompatActivity {
     private static final String TAG = "NovelReaderActivity";

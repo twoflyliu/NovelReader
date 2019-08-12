@@ -47,9 +47,9 @@ public final class StringUtil {
      * @return 移除后的字符串
      */
     public static String htmtlRemoveEscape(String htmlText) {
-        htmlText = htmlText.replaceAll("&nbsp;", " "); //移除空白字符
-        htmlText = htmlText.replaceAll("<br\\s?/>", "\n");
-        htmlText = htmlText.replaceAll("<p>([\\s\\S]+?)</p>", "$1\n");
+        htmlText = htmlText.replaceAll("&nbsp;", " ")
+                .replaceAll("<br\\s?/>", "\r\n")
+                .replaceAll("<p>([\\s\\S]+?)</p>", "$1\r\n");
         return htmlText;
     }
 

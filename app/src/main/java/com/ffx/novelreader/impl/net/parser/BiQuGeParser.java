@@ -117,6 +117,11 @@ public class BiQuGeParser implements NovelParser {
         String chapterContent = StringUtil.match(chapterPage, chapterContentPattern);
         chapterContent = StringUtil.htmtlRemoveEscape(chapterContent);
 
+        //保证首行缩进两个字符
+        chapterContent = chapterContent.replaceAll(";$", "").trim();
+        chapterContent = "\u3000\u3000\u3000" + chapterContent + "\r\n";
+        chapterContent = chapterContent.replaceAll("\r\n\\s+", "\r\n\u3000\u3000");
+
         chapter.setTitle(chapterTitle);
         chapter.setContent(chapterContent);
 

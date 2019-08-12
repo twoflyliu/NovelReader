@@ -1,6 +1,7 @@
 package com.ffx.novelreader.application;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import com.ffx.novelreader.factory.net.NovelParserFactory;
@@ -13,6 +14,8 @@ import com.ffx.novelreader.impl.net.BiQuGeSearchUrlGeneratorParser;
 import com.ffx.novelreader.impl.net.parser.BiQuGeParser;
 import com.ffx.novelreader.inter.net.SearchUrlGeneratorParser;
 import com.ffx.novelreader.inter.net.parser.NovelParser;
+import com.ffx.novelreader.treader.Config;
+import com.ffx.novelreader.treader.util.PageFactory;
 
 import org.litepal.LitePalApplication;
 import org.litepal.tablemanager.Connector;
@@ -44,6 +47,13 @@ public class AppContext extends LitePalApplication {
 
         // 注册搜索引擎
         initAllSearchEngine();
+
+        Config.createConfig(this);
+        PageFactory.createPageFactory(this);
+        initialEnv();
+    }
+
+    private void initialEnv() {
     }
 
 
