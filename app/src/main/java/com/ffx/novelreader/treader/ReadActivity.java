@@ -390,6 +390,12 @@ public class ReadActivity extends BaseActivity {
             }
         });
 
+        bookpage.setScreenChangeListener(new PageWidget.ScreenChangeListener() {
+            @Override
+            public void onScreenPixelChange(int widthPixel, int heightPixel) {
+                pageFactory.oScreenPixelChange(widthPixel, heightPixel);
+            }
+        });
     }
 
     // 同步进度条状态变化（Page页面主动传过来的）

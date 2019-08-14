@@ -53,6 +53,9 @@ public class PageWidget extends View {
     Scroller mScroller;
     private int mBgColor = 0xFFCEC29C;
     private TouchListener mTouchListener;
+    private ScreenChangeListener mScreenChangeListener;
+
+    private int pageMode = Config.PAGE_MODE_SIMULATION;
 
     public PageWidget(Context context) {
         this(context,null);
@@ -80,6 +83,26 @@ public class PageWidget extends View {
         mNextPageBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.RGB_565);
     }
 
+    public void setScreenChangeListener(ScreenChangeListener listener) {
+        this.mScreenChangeListener = listener;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics metric = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(metric);
+        if (metric.heightPixels != mScreenHeight || metric.widthPixels != mScreenWidth) {
+            if (mScreenChangeListener != null) {
+                initPage();
+                setPageMode(this.pageMode);
+                mScreenChangeListener.onScreenPixelChange(metric.widthPixels, metric.heightPixels);
+            }
+        }
+    }
+
     // 设置页面模式
     public void setPageMode(int pageMode){
         switch (pageMode){
@@ -98,6 +121,7 @@ public class PageWidget extends View {
             default:
                 mAnimationProvider = new SimulationAnimation(mCurPageBitmap,mNextPageBitmap,mScreenWidth,mScreenHeight);
         }
+        this.pageMode = pageMode;
     }
 
     public Bitmap getCurPage(){
@@ -299,6 +323,10 @@ public class PageWidget extends View {
         Boolean prePage();
         Boolean nextPage();
         void cancel();
+    }
+
+    public interface ScreenChangeListener {
+        void onScreenPixelChange(int widthPixel, int heightPixel);
     }
 
 }

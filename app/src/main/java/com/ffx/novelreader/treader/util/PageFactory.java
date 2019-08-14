@@ -164,9 +164,11 @@ public class PageFactory {
 
     private ContentProvider mBookUtil;
     private PageEvent mPageEvent;
+
     private TRPage currentPage;
     private TRPage prePage;
     private TRPage cancelPage;
+
     private BookTask bookTask;
 
     ContentValues values = new ContentValues();
@@ -177,6 +179,14 @@ public class PageFactory {
         OPENING,
         FINISH,
         FAIL,
+    }
+
+    public void oScreenPixelChange(int widthPixel, int heightPixel) {
+        if (mBookPageWidget != null) {
+            init(mBookPageWidget.getContext());
+            currentPage = getPageForBegin(currentPage.getBegin());
+            currentPage(true);
+        }
     }
 
     public static synchronized PageFactory getInstance(){
@@ -191,6 +201,10 @@ public class PageFactory {
     }
 
     private PageFactory(Context context) {
+        init(context);
+    }
+
+    private void init(Context context) {
         //mBookUtil = new BookUtil();
         mContext = context.getApplicationContext();
         config = Config.getInstance();
