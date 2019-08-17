@@ -11,6 +11,7 @@ import java.io.Serializable;
 public class Chapter extends DataSupport implements Serializable {
     private String title;
     private String content;
+
     private int menuId;
 
     public Chapter() {}

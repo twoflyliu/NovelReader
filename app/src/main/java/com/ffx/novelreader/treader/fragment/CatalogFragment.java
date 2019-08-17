@@ -39,6 +39,7 @@ public class CatalogFragment extends BaseFragment {
         CatalogueAdapter catalogueAdapter = new CatalogueAdapter(getContext(), catalogueList);
         catalogueAdapter.setCharter(pageFactory.getCurrentCharter());
         lv_catalogue.setAdapter(catalogueAdapter);
+        lv_catalogue.setSelection(pageFactory.getCurrentCharter());
         catalogueAdapter.notifyDataSetChanged();
     }
 

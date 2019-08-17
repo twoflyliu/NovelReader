@@ -181,7 +181,7 @@ public class PageFactory {
         FAIL,
     }
 
-    public void oScreenPixelChange(int widthPixel, int heightPixel) {
+    public void onScreenPixelChange(int widthPixel, int heightPixel) {
         if (mBookPageWidget != null) {
             init(mBookPageWidget.getContext());
             currentPage = getPageForBegin(currentPage.getBegin());
@@ -421,6 +421,8 @@ public class PageFactory {
 
    //向前翻页 - （会进行绘制）
     public void prePage(){
+        //long start = System.currentTimeMillis();
+
         if (currentPage.getBegin() <= 0) {
             Log.e(TAG,"当前是第一页");
             if (!m_isfirstPage){
@@ -436,10 +438,14 @@ public class PageFactory {
         onDraw(mBookPageWidget.getCurPage(),currentPage.getLines(),true); //绘制当前页
         currentPage = getPrePage();
         onDraw(mBookPageWidget.getNextPage(),currentPage.getLines(),true); //绘制下一页
+
+        //Log.i(TAG, "nextPage: elapsed " + (System.currentTimeMillis() - start) + " ms");
     }
 
     //向后翻页 - （会进行绘制）
     public void nextPage(){
+        //long start = System.currentTimeMillis();
+
         if (currentPage.getEnd() >= mBookUtil.getBookLen()) {
             Log.e(TAG,"已经是最后一页了");
             if (!m_islastPage){
@@ -456,7 +462,15 @@ public class PageFactory {
         prePage = currentPage;
         currentPage = getNextPage(); //获取下一页内容
         onDraw(mBookPageWidget.getNextPage(),currentPage.getLines(),true);
-        Log.e("nextPage","nextPagenext");
+        //Log.i(TAG, "nextPage: elapsed " + (System.currentTimeMillis() - start) + " ms");
+    }
+
+    //绘制当前页面
+    public void currentPage(Boolean updateChapter){
+        //long start = System.currentTimeMillis();
+        onDraw(mBookPageWidget.getCurPage(),currentPage.getLines(),updateChapter);
+        onDraw(mBookPageWidget.getNextPage(),currentPage.getLines(),updateChapter);
+        //Log.i(TAG, "currentPage: elapsed " + (System.currentTimeMillis() - start) + " ms");
     }
 
     //取消翻页 - (只是更新属性）
@@ -469,6 +483,10 @@ public class PageFactory {
      * @throws IOException
      */
     public void openBook(BookList bookList) throws IOException {
+        if (mBookPageWidget != null) {
+            init(mBookPageWidget.getContext());
+        }
+
         //清空数据
         currentCharter = 0;
 //        m_mbBufLen = 0;
@@ -586,6 +604,7 @@ public class PageFactory {
 
     // 获取下一页中的所有行（按可见页宽进行分行）
     public List<String> getNextLines(){
+        long start = System.currentTimeMillis();
         List<String> lines = new ArrayList<>();
         float width = 0;
         float height = 0;
@@ -634,11 +653,16 @@ public class PageFactory {
         for (String str : lines){
             Log.e(TAG,str + "   ");
         }
+
+        Log.i(TAG, "getNextLines: elapsed " + (System.currentTimeMillis() - start) + " ms");
+
         return lines;
     }
 
     // 获取前一页中的所有内容（按可见页宽度来进行分行）
     public List<String> getPreLines(){
+        long start = System.currentTimeMillis();
+
         List<String> lines = new ArrayList<>();
         float width = 0;
         String line = "";
@@ -695,8 +719,11 @@ public class PageFactory {
             }
         }
 
+        Log.i(TAG, "getPreLines: elapsed " + (System.currentTimeMillis() - start) + " ms");
         return reLines;
     }
+
+
 
     // 跳到前一章节
     public void preChapter(){
@@ -742,12 +769,6 @@ public class PageFactory {
             }
         }
         return num;
-    }
-
-    //绘制当前页面
-    public void currentPage(Boolean updateChapter){
-        onDraw(mBookPageWidget.getCurPage(),currentPage.getLines(),updateChapter);
-        onDraw(mBookPageWidget.getNextPage(),currentPage.getLines(),updateChapter);
     }
 
     //更新电量

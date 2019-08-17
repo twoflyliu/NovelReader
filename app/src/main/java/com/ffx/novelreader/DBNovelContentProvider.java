@@ -1,5 +1,6 @@
 package com.ffx.novelreader;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.ffx.novelreader.entity.po.Chapter;
@@ -92,15 +93,18 @@ public class DBNovelContentProvider implements ContentProvider {
     // 如果back=true, 则当前位置不变
     @Override
     public int next(boolean back){
+        //long start = System.currentTimeMillis();
         position += 1;
         if (position > bookLen){
             position = bookLen;
+            //Log.i(TAG, "next: elapsed " + (System.currentTimeMillis() - start) + " ms");
             return -1;
         }
         char result = current();
         if (back) {
             position -= 1;
         }
+        //Log.i(TAG, "next: elapsed " + (System.currentTimeMillis() - start) + " ms");
         return result;
     }
 
@@ -153,12 +157,36 @@ public class DBNovelContentProvider implements ContentProvider {
     }
 
     private int calcChapterIndex(long position) {
-        for (int i = 0; i < chapterRangeList.size(); i++) {
-            Range range = chapterRangeList.get(i);
+        // 使用二分法查找来提高性能
+//        long start = System.currentTimeMillis();
+//        for (int i = 0; i < chapterRangeList.size(); i++) {
+//            Range range = chapterRangeList.get(i);
+//            if (position >= range.getBegin() && position < range.getEnd()) {
+//                Log.i(TAG, "calcChapterIndex: elapsed " + (System.currentTimeMillis() - start) + " ms ");
+//                return i;
+//            }
+//        }
+//        Log.i(TAG, "calcChapterIndex: elapsed " + (System.currentTimeMillis() - start) + " ms ");
+
+        //long start = System.currentTimeMillis();
+        int front = 0;
+        int end = chapterRangeList.size() - 1;
+        int mid = 0;
+
+        while (front <= end) {
+            mid = (front + end) / 2;
+            Range range = chapterRangeList.get(mid);
             if (position >= range.getBegin() && position < range.getEnd()) {
-                return i;
+                //Log.i(TAG, "calcChapterIndex: elapsed " + (System.currentTimeMillis() - start) + " ms ");
+                return mid;
+            } else if (position < range.getBegin()) {
+                end = mid - 1;
+            } else if (position >= range.getEnd()) {
+                front = mid + 1;
             }
         }
+
+        //Log.i(TAG, "calcChapterIndex: elapsed " + (System.currentTimeMillis() - start) + " ms ");
         return -1;
     }
 
@@ -252,6 +280,9 @@ public class DBNovelContentProvider implements ContentProvider {
         private Chapter prevChapter;
         private Chapter nextChapter;
 
+        private AsyncLoader prevChapterLoader;
+        private AsyncLoader nextChapterLoader;
+
         private int currentChapterIndex;
 
         public Chapter getCurrentChapter() {
@@ -274,8 +305,6 @@ public class DBNovelContentProvider implements ContentProvider {
             } else {
                 updateBufferChapter(chapterIndex);
             }
-
-            this.currentChapterIndex = chapterIndex;
         }
 
         private void updateBufferChapter(final int chapterIndex) {
@@ -284,39 +313,60 @@ public class DBNovelContentProvider implements ContentProvider {
 //                    + ", currentChapterIndex=" + currentChapterIndex);
             if (this.currentChapterIndex == chapterIndex) return;
 
-            if (chapterIndex == this.currentChapterIndex - 1) { //向前(向左）
-                nextChapter = currentChapter;
-                currentChapter = prevChapter;
-                Log.i(TAG, "updateBufferChapter: hit prev chapter(" + chapterIndex + ")");
-
-                if (chapterIndex > 0) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 加载前一页
-                            Log.i(TAG, "updateBufferChapter(async): update chapter(" + (chapterIndex - 1) + ")");
-                            prevChapter = chapterService.findByMenuId(menuList.get(chapterIndex - 1).getId());
-                        }
-                    }).start();
-                }
-            } else if (chapterIndex == this.currentChapterIndex + 1) { //向后（向右）
-                prevChapter = currentChapter;
-                currentChapter = nextChapter;
-                Log.i(TAG, "updateBufferChapter: hit next chapter(" + chapterIndex + ")");
-
-                if (chapterIndex + 1 < menuList.size()) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 加载下一页
-                            Log.i(TAG, "updateBufferChapter(async): update chapter(" + (chapterIndex + 1) + ")");
-                            nextChapter = chapterService.findByMenuId(menuList.get(chapterIndex + 1).getId());
-                        }
-                    }).start();
-                }
-            } else { //点击菜单进行章节切换，则重新加载(用这个算法会卡的）
-                Log.i(TAG, "updateBufferChapter: call initBufferChapter");
+            if (prevChapter == currentChapter || currentChapter == nextChapter) {
+                Log.i(TAG, "updateBufferChapter: call initBufferChapter(async load failed)");
                 initBufferChapter(chapterIndex);
+            } else {
+                if (chapterIndex == this.currentChapterIndex - 1) { //向前(向左）
+                    nextChapter = currentChapter;
+                    currentChapter = prevChapter;
+                    Log.i(TAG, "updateBufferChapter: hit prev chapter(" + chapterIndex + ")");
+
+                    this.currentChapterIndex = chapterIndex;
+                    asyncLoadPrevChapter();
+                } else if (chapterIndex == this.currentChapterIndex + 1) { //向后（向右）
+                    prevChapter = currentChapter;
+                    currentChapter = nextChapter;
+                    Log.i(TAG, "updateBufferChapter: hit next chapter(" + chapterIndex + ")");
+                    this.currentChapterIndex = chapterIndex;
+                    asyncLoadNextChapter();
+                } else { //点击菜单进行章节切换，则重新加载(用这个算法会卡的）
+                    Log.i(TAG, "updateBufferChapter: call initBufferChapter");
+                    initBufferChapter(chapterIndex);
+                }
+            }
+
+            if (!menuList.get(currentChapterIndex).getTitle().equals(currentChapter.getTitle())) {
+                Log.e(TAG, "updateBufferChapter: menu and chapter are not consisent(menu=" + menuList.get(currentChapterIndex).getTitle()
+                    + ", chapter=" + currentChapter.getTitle() + ")");
+            }
+        }
+
+        private void asyncLoadPrevChapter() {
+            if (prevChapterLoader != null) {
+                prevChapterLoader.cancel();
+                prevChapterLoader = null;
+            }
+
+            if (currentChapterIndex - 1 >= 0) {
+                prevChapterLoader = new AsyncLoader(AsyncLoader.CMD_LOAD_PREV_CHAPTER, currentChapterIndex - 1);
+                prevChapterLoader.start();
+            } else {
+                prevChapter = null;
+            }
+        }
+
+        private void asyncLoadNextChapter() {
+            if (nextChapterLoader != null) {
+                nextChapterLoader.cancel();
+                nextChapterLoader = null;
+            }
+
+            if (currentChapterIndex + 1 < menuList.size()) {
+                nextChapterLoader = new AsyncLoader(AsyncLoader.CMD_LOAD_NEXT_CHAPTER, currentChapterIndex + 1);
+                nextChapterLoader.start();
+            } else {
+                nextChapter = null;
             }
         }
 
@@ -325,9 +375,12 @@ public class DBNovelContentProvider implements ContentProvider {
                 chapterIndex = 0;
             }
 
+            this.currentChapterIndex = chapterIndex;
+
             if (chapterIndex > 0) {
                 Log.i(TAG, "initBufferChapter(sync): init prev chapter(" + (chapterIndex - 1) + ")");
                 prevChapter = chapterService.findByMenuId(menuList.get(chapterIndex - 1).getId());
+                //asyncLoadPrevChapter();
             }
 
             Log.i(TAG, "initBufferChapter(sync): init current chapter(" + (chapterIndex) + ")");
@@ -336,6 +389,7 @@ public class DBNovelContentProvider implements ContentProvider {
             if (chapterIndex + 1 < menuList.size()) {
                 Log.i(TAG, "initBufferChapter(sync): init next chapter(" + (chapterIndex + 1) + ")");
                 nextChapter = chapterService.findByMenuId(menuList.get(chapterIndex + 1).getId());
+                //asyncLoadNextChapter();
             }
         }
 
@@ -349,6 +403,46 @@ public class DBNovelContentProvider implements ContentProvider {
             nextChapter = null;
 
             currentChapterIndex = -1;
+        }
+
+        class AsyncLoader extends Thread {
+            private static final int CMD_LOAD_PREV_CHAPTER = 0;
+            private static final int CMD_LOAD_NEXT_CHAPTER = 1;
+            private static final int CMD_NONE = 2;
+
+            private boolean canceled = false;
+            private int cmd = CMD_NONE;
+
+            private int chapterIndex;
+
+            public AsyncLoader(int cmd, int chapterIndex) {
+                this.cmd = cmd;
+                this.chapterIndex = chapterIndex;
+                this.canceled = false;
+            }
+
+            public void cancel() {
+                this.canceled = true;
+            }
+
+            @Override
+            public void run() {
+                if (CMD_NONE == cmd) return;
+                Chapter chapter = null;
+                if (chapterIndex >= 0 && chapterIndex < menuList.size()) {
+                    chapter = chapterService.findByMenuId(menuList.get(chapterIndex).getId());
+                }
+
+                if (!canceled) {
+                    if (CMD_LOAD_NEXT_CHAPTER == cmd) {
+                        nextChapter = chapter;
+                    } else if (CMD_LOAD_PREV_CHAPTER == cmd) {
+                        prevChapter = chapter;
+                    }
+                }
+
+                Log.i(TAG, "updateBufferChapter(async): update chapter(" + (chapterIndex) + ")");
+            }
         }
     }
 }

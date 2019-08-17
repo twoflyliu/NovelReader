@@ -1,20 +1,17 @@
 package com.ffx.novelreader.treader;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.database.SQLException;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -39,7 +36,6 @@ import com.ffx.novelreader.treader.db.BookList;
 import com.ffx.novelreader.treader.db.BookMarks;
 import com.ffx.novelreader.treader.dialog.PageModeDialog;
 import com.ffx.novelreader.treader.dialog.SettingDialog;
-import com.ffx.novelreader.treader.util.BookUtil;
 import com.ffx.novelreader.treader.util.BrightnessUtil;
 import com.ffx.novelreader.treader.util.PageFactory;
 import com.ffx.novelreader.treader.view.PageWidget;
@@ -221,30 +217,33 @@ public class ReadActivity extends BaseActivity {
         // 初始化日渐/白天模式按钮内容
         initDayOrNight();
 
-        if (checkPermission(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                EXTERNAL_STORAGE_REQUEST_CODE, "需要读写外发存储权限")) {
-            openBook(bookList);
-        }
+        // 打开小说
+        openBook(bookList);
+
+//        if (checkPermission(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+//                EXTERNAL_STORAGE_REQUEST_CODE, "需要读写外发存储权限")) {
+//            openBook(bookList);
+//        }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case EXTERNAL_STORAGE_REQUEST_CODE:
-                int i;
-                for (i = 0; i < grantResults.length; i++) {
-                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                        break;
-                    }
-                }
-                if (i == grantResults.length) {
-                    openBook(bookList);
-                }
-                break;
-            default:
-                break;
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        switch (requestCode) {
+//            case EXTERNAL_STORAGE_REQUEST_CODE:
+//                int i;
+//                for (i = 0; i < grantResults.length; i++) {
+//                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+//                        break;
+//                    }
+//                }
+//                if (i == grantResults.length) {
+//                    openBook(bookList);
+//                }
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 
     private void openBook(BookList bookList) {
         try {
@@ -393,7 +392,7 @@ public class ReadActivity extends BaseActivity {
         bookpage.setScreenChangeListener(new PageWidget.ScreenChangeListener() {
             @Override
             public void onScreenPixelChange(int widthPixel, int heightPixel) {
-                pageFactory.oScreenPixelChange(widthPixel, heightPixel);
+                pageFactory.onScreenPixelChange(widthPixel, heightPixel);
             }
         });
     }
