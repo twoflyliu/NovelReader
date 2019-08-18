@@ -17,11 +17,15 @@
 
 ### 显示本地所有小说功能
 
-<img src="./doc/imgs/novels.jpg" width="50%" height="50%" alt="所有小说" align="left" />
+<p align="left">
+<img src="./doc/imgs/novels.jpg" width="50%" height="50%" alt="所有小说" />
+</p>
 
 ### 显示阅读小说
 
-<img src="./doc/imgs/view.jpg" width="50%" height="50%" alt="阅读" align="left" />
+<p align="left">
+<img src="./doc/imgs/view.jpg" width="50%" height="50%" alt="阅读" />
+</p>
 
 ## 安装
 [apk文件](./app/app-release.apk "apk文件")
