@@ -8,11 +8,11 @@
 
 ### 搜索功能
 
-![]("./doc/imgs/search.jpg" "搜索某个小说的运行效果")
+![](./doc/imgs/search.jpg "搜索某个小说的运行效果")
 
 ### 下载功能
 
-![]("./doc/imgs/download.jpg" "下载某个小说的运行效果")
+![](./doc/imgs/download.jpg "下载某个小说的运行效果")
 
 
 ### 显示本地所有小说功能
