@@ -8,22 +8,25 @@
 
 ### 搜索功能
 
+<div>
 <img src="./doc/imgs/search.jpg" width="50%" height="50%" alt="搜索某个小说的运行效果" align="left" />
-<br/>
+</div>
 
 ### 下载功能
 
+<div>
 <img src="./doc/imgs/download.jpg" width="50%" height="50%" alt="下载某个小说的运行效果" align="left" />
-<br/>
+</div>
 
 ### 显示本地所有小说功能
-
+<div>
 <img src="./doc/imgs/novels.jpg" width="50%" height="50%" alt="所有小说" align="left" />
-<br/>
+</div>
 
 ### 显示阅读小说
+<div>
 <img src="./doc/imgs/view.jpg" width="50%" height="50%" alt="阅读" align="left" />
-<br/>
+</div>
 
 ## 安装
 [apk文件](./app/app-release.apk "apk文件")
