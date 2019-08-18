@@ -69,6 +69,14 @@ public class MainSearchFragment extends Fragment {
     }
 
     private void updateSearchStatus(boolean searching) {
+        updateSearchStatus(null, searching);
+    }
+
+    private void updateSearchStatus(String text, boolean searching) {
+        if (!TextUtils.isEmpty(text)) {
+            searchStatusTextView.setText(text);
+        }
+
         if (searching) {
             searchStatusTextView.setVisibility(View.VISIBLE);
         } else {
@@ -86,7 +94,7 @@ public class MainSearchFragment extends Fragment {
                     Toast.makeText(AppContext.applicationContext,
                             "小说名称不能为空", Toast.LENGTH_SHORT).show();
                 } else {
-                    updateSearchStatus(true);
+                    updateSearchStatus("正在搜索...", true);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -94,8 +102,12 @@ public class MainSearchFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    updateSearchStatus(false);
-                                    searchResultAdapter.refresh(novelList);
+                                    if (null == novelList || 0 == novelList.size()) {
+                                        updateSearchStatus("搜索结果空", true);
+                                    } else {
+                                        updateSearchStatus(false);
+                                        searchResultAdapter.refresh(novelList);
+                                    }
                                 }
                             });
                         }
