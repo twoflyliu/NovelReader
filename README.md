@@ -7,22 +7,23 @@
 ## 运行效果
 
 ### 搜索功能
-![search](./doc/imgs/search.jpg "搜索某个小说的运行效果"){:height="50%" width="50%"}
+
+<img src="./doc/imgs/search.jpg" width="50%" height="50%" alt="搜索某个小说的运行效果" align="left" />
 
 ### 下载功能
-![download](./doc/imgs/download.jpg "搜索某个小说的运行效果"){:height="50%" width="50%"}
+![download](./doc/imgs/download.jpg "搜索某个小说的运行效果"){:height="30%" width="30%"}
 
 ### 显示本地所有小说功能
-![novels](./doc/imgs/novels.jpg "所有小说"){:height="50%" width="50%"}
+![novels](./doc/imgs/novels.jpg "所有小说"){:height="30%" width="30%"}
 
 ### 显示阅读小说
-![view](./doc/imgs/view.jpg "阅读"){:height="50%" width="50%"}
+![view](./doc/imgs/view.jpg "阅读"){:height="30%" width="30%"}
 
 ## 安装
-apk文件位于[apk](./app/app-release.apk "apk文件"){:height="50%" width="50%"}
+[apk文件](./app/app-release.apk "apk文件")
 
 ## 感谢
-感谢如果小说阅读器项目[thanks](https://github.com/PeachBlossom/treader "如风小说")
+感谢[如风小说阅读器](https://github.com/PeachBlossom/treader "如风小说")项目
 
 ## 参考
-1.linux端小说阅读器[reference1](https://github.com/TwoFlyLiu/novel "linux端小说阅读器") 
+1.感[谢linux端小说阅读器](https://github.com/TwoFlyLiu/novel "linux端小说阅读器")项目
