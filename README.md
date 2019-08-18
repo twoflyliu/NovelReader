@@ -7,24 +7,21 @@
 ## 运行效果
 
 ### 搜索功能
-![]("./doc/imgs/search.jpg" =50%x50% "搜索某个小说的运行效果")
 
+![]("./doc/imgs/search.jpg" "搜索某个小说的运行效果")
 
 ### 下载功能
 
-<div>
-<img src="./doc/imgs/download.jpg" width="50%" height="50%" alt="下载某个小说的运行效果" align="left" />
-</div>
+![]("./doc/imgs/download.jpg" "下载某个小说的运行效果")
+
 
 ### 显示本地所有小说功能
-<div>
+
 <img src="./doc/imgs/novels.jpg" width="50%" height="50%" alt="所有小说" align="left" />
-</div>
 
 ### 显示阅读小说
-<div>
+
 <img src="./doc/imgs/view.jpg" width="50%" height="50%" alt="阅读" align="left" />
-</div>
 
 ## 安装
 [apk文件](./app/app-release.apk "apk文件")
