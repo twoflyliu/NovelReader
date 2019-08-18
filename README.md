@@ -19,4 +19,7 @@
 ![view](./doc/imgs/view.jpg "阅读")
 
 ## 安装
-apk文件位于![apk](./app/app-release.apk "apk文件")
+apk文件位于[apk](./app/app-release.apk "apk文件")
+
+## 感谢
+感谢如果小说阅读器项目[thanks](https://github.com/PeachBlossom/treader "如风小说")
