@@ -7,10 +7,8 @@
 ## 运行效果
 
 ### 搜索功能
+![]("./doc/imgs/search.jpg" =50%x50% "搜索某个小说的运行效果")
 
-<div>
-<img src="./doc/imgs/search.jpg" width="50%" height="50%" alt="搜索某个小说的运行效果" align="left" />
-</div>
 
 ### 下载功能
 
